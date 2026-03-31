@@ -15,6 +15,17 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RoleandaccessController;
 use App\Http\Controllers\CryptocurrencyController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ContactLeadController as AdminContactLeadController;
+use App\Http\Controllers\Admin\BlogCategoryController as AdminBlogCategoryController;
+use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
+use App\Http\Controllers\Admin\CouponController as AdminCouponController;
+use App\Http\Controllers\Admin\NewsletterSubscriberController as AdminNewsletterSubscriberController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductVariantController as AdminProductVariantController;
+use App\Http\Controllers\Admin\SupportTicketController as AdminSupportTicketController;
+use App\Http\Controllers\Admin\TaxRateController as AdminTaxRateController;
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('index');
@@ -192,4 +203,23 @@ Route::prefix('cryptocurrency')->group(function () {
         Route::get('/portfolio', 'portfolio')->name('portfolio');
         Route::get('/wallet', 'wallet')->name('wallet');
     });
+});
+
+Route::prefix('admin/ecommerce')->name('admin.ecommerce.')->group(function () {
+    Route::resource('categories', AdminCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('products', AdminProductController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::patch('products/{product}/inventory', [AdminProductController::class, 'updateInventory'])->name('products.inventory.update');
+    Route::resource('variants', AdminProductVariantController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::patch('variants/{variant}/inventory', [AdminProductVariantController::class, 'updateInventory'])->name('variants.inventory.update');
+    Route::resource('coupons', AdminCouponController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('tax-rates', AdminTaxRateController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('blog-categories', AdminBlogCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('blog-posts', AdminBlogPostController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('contact-leads', AdminContactLeadController::class)->only(['index', 'update', 'destroy']);
+    Route::resource('newsletter', AdminNewsletterSubscriberController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('support-tickets', AdminSupportTicketController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
 });

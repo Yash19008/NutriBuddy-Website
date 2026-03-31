@@ -49,6 +49,47 @@
                     </li>
                 </ul>
             </li>
+            <li class="dropdown">
+                <a  href="javascript:void(0)">
+                    <iconify-icon icon="mdi:cart-outline" class="menu-icon"></iconify-icon>
+                    <span>NutriBuddy Ecommerce</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('admin.ecommerce.categories.index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Categories</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.products.index') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Products</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.variants.index') }}"><i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i> Variants</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.tax-rates.index') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> Tax Rates</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.coupons.index') }}"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Coupons</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.orders.index') }}"><i class="ri-circle-fill circle-icon text-success-main w-auto"></i> Orders</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.support-tickets.index') }}"><i class="ri-circle-fill circle-icon text-pink w-auto"></i> Support Tickets</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.contact-leads.index') }}"><i class="ri-circle-fill circle-icon text-orange w-auto"></i> Contact Leads</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.newsletter.index') }}"><i class="ri-circle-fill circle-icon text-cyan w-auto"></i> Newsletter</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.blog-categories.index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Blog Categories</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.blog-posts.index') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Blog Posts</a>
+                    </li>
+                </ul>
+            </li>
             <li class="sidebar-menu-group-title">Application</li>
             <li>
                   <a href="{{ route('email') }}">

@@ -44,4 +44,29 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function customerAddresses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CustomerAddress::class);
+    }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function supportTickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
+
+    public function blogPosts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BlogPost::class, 'author_id');
+    }
+
+    public function assignedLeads(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ContactLead::class, 'assigned_to');
+    }
 }
