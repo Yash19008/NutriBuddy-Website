@@ -7,169 +7,99 @@
 @section('content')
     @include('admin.ecommerce._messages')
 
-    <div class="card mb-24">
-        <div class="card-header">
-            <h5 class="card-title mb-0">Create Product</h5>
-        </div>
-        <div class="card-body">
-            <form method="POST" action="{{ route('admin.ecommerce.products.store') }}" class="row g-3">
-                @csrf
-                <div class="col-md-4">
-                    <label class="form-label">Name</label>
-                    <input type="text" name="name" class="form-control" required>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">SKU</label>
-                    <input type="text" name="sku" class="form-control" required>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Type</label>
-                    <select name="product_type" class="form-select" required>
-                        <option value="simple">Simple</option>
-                        <option value="variable">Variable</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Base Price (INR)</label>
-                    <input type="number" step="0.01" min="0" name="base_price" class="form-control" required>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Brand</label>
-                    <input type="text" name="brand" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Category</label>
-                    <select name="category_id" class="form-select">
-                        <option value="">Select</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tax Rate</label>
-                    <select name="tax_rate_id" class="form-select">
-                        <option value="">Select</option>
-                        @foreach ($taxRates as $taxRate)
-                            <option value="{{ $taxRate->id }}">{{ $taxRate->name }} ({{ $taxRate->rate }}%)</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">HSN Code</label>
-                    <input type="text" name="hsn_code" class="form-control">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Slug (optional)</label>
-                    <input type="text" name="slug" class="form-control">
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <div class="form-check me-3">
-                        <input class="form-check-input" type="checkbox" value="1" name="is_variant_enabled">
-                        <label class="form-check-label">Variants Enabled</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <div class="form-check me-3">
-                        <input class="form-check-input" type="checkbox" value="1" name="is_featured">
-                        <label class="form-check-label">Featured</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <div class="form-check mb-0">
-                        <input class="form-check-input" type="checkbox" value="1" name="is_active" checked>
-                        <label class="form-check-label">Active</label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <label class="form-label">Short Description</label>
-                    <textarea name="short_description" class="form-control" rows="2"></textarea>
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Create Product</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <div class="card">
-        <div class="card-header">
+
+    <div class="card basic-data-table">
+        <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-3">
             <h5 class="card-title mb-0">Product List</h5>
+            <a href="{{ route('admin.ecommerce.products.create') }}" class="btn btn-sm btn-primary-600"><i class="ri-add-line"></i> Add New Product</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table bordered-table mb-0">
+                <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Product Details</th>
                             <th>SKU</th>
                             <th>Category</th>
                             <th>Price</th>
-                            <th>Variants</th>
-                            <th>Inventory</th>
-                            <th>Status</th>
+                            <th>Status/Stock</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($products as $product)
+                        @foreach ($products as $product)
                             <tr>
-                                <td>{{ $product->id }}</td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product->sku }}</td>
-                                <td>{{ $product->category?->name ?? '—' }}</td>
-                                <td>INR {{ number_format((float) $product->base_price, 2) }}</td>
-                                <td>{{ $product->is_variant_enabled ? 'Enabled' : 'Disabled' }} ({{ $product->variants->count() }})</td>
-                                <td>{{ $product->inventory?->stock_qty ?? 0 }}</td>
-                                <td>{{ $product->is_active ? 'Active' : 'Inactive' }}</td>
+                                <td>
+                                    @php
+                                        $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                    @endphp
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ $primaryImage ? asset('storage/' . $primaryImage->image_path) : asset('assets/images/logo-icon.png') }}" 
+                                            alt="" class="w-48-px h-48-px radius-8 border flex-shrink-0 object-fit-cover">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-md fw-semibold text-dark mb-0">{{ $product->name }}</span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if($product->is_variant_enabled)
+                                                <span class="badge text-xs bg-info-100 text-info-600 px-2 fw-medium">Variants ({{ $product->variants->count() }})</span>
+                                            @endif
+                                            @if($product->is_featured)
+                                                <span class="badge text-xs bg-warning-100 text-warning-600 px-2 fw-medium">Featured</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="text-sm text-secondary-light fw-medium">{{ $product->sku }}</span></td>
+                                <td><span class="badge bg-secondary-100 text-secondary-600">{{ $product->category?->name ?? 'None' }}</span></td>
+                                <td>
+                                    <div class="fw-bold text-primary-600">INR {{ number_format((float) $product->base_price, 2) }}</div>
+                                    @if($product->compare_at_price > $product->base_price)
+                                        <small class="text-decoration-line-through text-secondary-light">INR {{ number_format($product->compare_at_price, 2) }}</small>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column gap-1">
+                                        @if($product->is_active)
+                                            <span class="badge bg-success-100 text-success-600 w-fit">Active</span>
+                                        @else
+                                            <span class="badge bg-danger-100 text-danger-600 w-fit">Inactive</span>
+                                        @endif
+                                        <small class="text-xs {{ ($product->inventory?->stock_qty ?? 0) > 10 ? 'text-success-main' : 'text-danger-main' }} fw-bold">
+                                            Stock: {{ $product->inventory?->stock_qty ?? 0 }}
+                                        </small>
+                                    </div>
+                                </td>
                                 <td class="text-end">
-                                    <form method="POST" action="{{ route('admin.ecommerce.products.update', $product) }}" class="d-inline-flex gap-8 align-items-center me-8">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="text" name="name" value="{{ $product->name }}" class="form-control form-control-sm" style="width: 150px" required>
-                                        <input type="text" name="sku" value="{{ $product->sku }}" class="form-control form-control-sm" style="width: 120px" required>
-                                        <input type="number" step="0.01" min="0" name="base_price" value="{{ $product->base_price }}" class="form-control form-control-sm" style="width: 110px" required>
-                                        <input type="hidden" name="slug" value="{{ $product->slug }}">
-                                        <input type="hidden" name="product_type" value="{{ $product->product_type }}">
-                                        <input type="hidden" name="category_id" value="{{ $product->category_id }}">
-                                        <input type="hidden" name="tax_rate_id" value="{{ $product->tax_rate_id }}">
-                                        <input type="hidden" name="is_variant_enabled" value="0">
-                                        <input type="checkbox" name="is_variant_enabled" value="1" {{ $product->is_variant_enabled ? 'checked' : '' }}>
-                                        <input type="hidden" name="is_active" value="0">
-                                        <input type="checkbox" name="is_active" value="1" {{ $product->is_active ? 'checked' : '' }}>
-                                        <button type="submit" class="btn btn-sm btn-success">Save</button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.ecommerce.products.inventory.update', $product) }}" class="d-inline-flex gap-8 align-items-center me-8">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="number" name="stock_qty" value="{{ $product->inventory?->stock_qty ?? 0 }}" class="form-control form-control-sm" style="width: 90px" min="0" required>
-                                        <input type="hidden" name="reserved_qty" value="{{ $product->inventory?->reserved_qty ?? 0 }}">
-                                        <input type="hidden" name="low_stock_threshold" value="{{ $product->inventory?->low_stock_threshold ?? 5 }}">
-                                        <input type="hidden" name="track_stock" value="0">
-                                        <input type="checkbox" name="track_stock" value="1" {{ ($product->inventory?->track_stock ?? true) ? 'checked' : '' }}>
-                                        <input type="hidden" name="is_in_stock" value="0">
-                                        <input type="checkbox" name="is_in_stock" value="1" {{ ($product->inventory?->is_in_stock ?? true) ? 'checked' : '' }}>
-                                        <button type="submit" class="btn btn-sm btn-primary">Stock</button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.ecommerce.products.destroy', $product) }}" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this product?')">Delete</button>
-                                    </form>
+                                    <div class="d-flex align-items-center justify-content-end gap-2">
+                                        <a href="{{ route('admin.ecommerce.products.edit', $product) }}" class="btn btn-sm btn-outline-primary-600 radius-8 d-inline-flex align-items-center gap-1">
+                                            <iconify-icon icon="lucide:edit"></iconify-icon> Edit
+                                        </a>
+                                        <form method="POST" action="{{ route('admin.ecommerce.products.destroy', $product) }}" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger-600 radius-8 d-inline-flex align-items-center gap-1" onclick="return confirm('Delete this product?')">
+                                                <iconify-icon icon="mingcute:delete-2-line"></iconify-icon> Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9" class="text-center">No products found.</td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
-            </div>
-            <div class="mt-16">
-                {{ $products->links() }}
             </div>
         </div>
     </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('dataTable')) {
+            new DataTable('#dataTable');
+        }
+    });
+</script>

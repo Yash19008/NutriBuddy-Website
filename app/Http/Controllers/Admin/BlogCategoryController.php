@@ -14,7 +14,7 @@ class BlogCategoryController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.blog-categories.index', [
-            'categories' => BlogCategory::withCount('posts')->latest()->paginate(15),
+            'categories' => BlogCategory::withCount('posts')->latest()->get(),
         ]);
     }
 

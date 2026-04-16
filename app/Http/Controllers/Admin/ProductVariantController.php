@@ -17,7 +17,7 @@ class ProductVariantController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.variants.index', [
-            'variants' => ProductVariant::with(['product', 'inventory'])->latest()->paginate(20),
+            'variants' => ProductVariant::with(['product', 'inventory'])->latest()->get(),
             'products' => Product::where('is_active', true)->orderBy('name')->get(['id', 'name']),
         ]);
     }
@@ -94,6 +94,11 @@ class ProductVariantController extends Controller
             'position' => ['nullable', 'integer', 'min:0'],
             'is_default' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
+            // Inventory fields
+            'stock_qty' => ['nullable', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
+            'track_stock' => ['nullable', 'boolean'],
+            'is_in_stock' => ['nullable', 'boolean'],
         ]);
 
         $validated['attributes'] = isset($validated['attributes']) ? json_decode($validated['attributes'], true) : null;
@@ -118,6 +123,20 @@ class ProductVariantController extends Controller
             'position' => $validated['position'] ?? 0,
             'currency' => 'INR',
         ]);
+
+        // Update Inventory if stock fields are present
+        if ($request->has('stock_qty')) {
+            Inventory::updateOrCreate(
+                ['product_variant_id' => $variant->id],
+                [
+                    'product_id' => $variant->product_id,
+                    'track_stock' => (bool) ($request->track_stock ?? false),
+                    'stock_qty' => $request->stock_qty,
+                    'low_stock_threshold' => $request->low_stock_threshold ?? 5,
+                    'is_in_stock' => (bool) ($request->is_in_stock ?? false),
+                ]
+            );
+        }
 
         return back()->with('success', 'Variant updated successfully.');
     }

@@ -16,7 +16,7 @@ class SupportTicketController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.support-tickets.index', [
-            'tickets' => SupportTicket::with('user')->latest()->paginate(20),
+            'tickets' => SupportTicket::with('user')->latest()->get(),
             'users' => User::orderBy('name')->get(['id', 'name']),
         ]);
     }

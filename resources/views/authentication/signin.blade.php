@@ -21,26 +21,43 @@
                     <h4 class="mb-12">Sign In to your Account</h4>
                     <p class="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
                 </div>
-                <form action="#">
+                <form action="{{ route('admin.login.post') }}" method="POST">
+                    @csrf
+                    @if($errors->any())
+                        <div class="alert alert-danger radius-12 mb-16 px-16 py-8">
+                            <ul class="mb-0 list-unstyled text-sm">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    
+                    @if(session('success'))
+                        <div class="alert alert-success radius-12 mb-16 px-16 py-8 text-sm">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
                     <div class="icon-field mb-16">
                         <span class="icon top-50 translate-middle-y">
                             <iconify-icon icon="mage:email"></iconify-icon>
                         </span>
-                        <input type="email" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Email">
+                        <input type="email" name="email" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Email" value="{{ old('email') }}" required>
                     </div>
                     <div class="position-relative mb-20">
                         <div class="icon-field">
                             <span class="icon top-50 translate-middle-y">
                                 <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
                             </span>
-                            <input type="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password" placeholder="Password">
+                            <input type="password" name="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password" placeholder="Password" required>
                         </div>
                         <span class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light" data-toggle="#your-password"></span>
                     </div>
                     <div class="">
                         <div class="d-flex justify-content-between gap-2">
                             <div class="form-check style-check d-flex align-items-center">
-                                <input class="form-check-input border border-neutral-300" type="checkbox" value="" id="remeber">
+                                <input class="form-check-input border border-neutral-300" type="checkbox" name="remember" id="remeber">
                                 <label class="form-check-label" for="remeber">Remember me </label>
                             </div>
                             <a  href="javascript:void(0)" class="text-primary-600 fw-medium">Forgot Password?</a>

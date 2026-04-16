@@ -53,65 +53,93 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card basic-data-table">
         <div class="card-header"><h5 class="card-title mb-0">Ticket List</h5></div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table bordered-table mb-0">
+                <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
                     <thead>
                         <tr>
-                            <th>Ticket</th>
+                            <th>Ticket Details</th>
                             <th>User</th>
-                            <th>Subject</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Last Reply</th>
-                            <th class="text-end">Actions</th>
+                            <th>Status/Priority</th>
+                            <th>Last Activity</th>
+                            <th class="text-end">Update Management</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($tickets as $ticket)
+                        @foreach ($tickets as $ticket)
+                            @php
+                                $statusClass = match(strtolower($ticket->status)) {
+                                    'resolved', 'closed' => 'success',
+                                    'in_progress' => 'info',
+                                    default => 'warning'
+                                };
+                                $priorityClass = match(strtolower($ticket->priority)) {
+                                    'high' => 'danger',
+                                    'medium' => 'warning',
+                                    default => 'success'
+                                };
+                            @endphp
                             <tr>
-                                <td>{{ $ticket->ticket_number }}</td>
-                                <td>{{ $ticket->user?->name ?? 'Guest' }}</td>
-                                <td>{{ $ticket->subject }}</td>
-                                <td>{{ str_replace('_', ' ', ucfirst($ticket->status)) }}</td>
-                                <td>{{ ucfirst($ticket->priority) }}</td>
-                                <td>{{ $ticket->last_replied_at?->format('d M Y H:i') ?? '—' }}</td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-md fw-bold text-primary-600">{{ $ticket->ticket_number }}</span>
+                                        <small class="text-dark fw-medium text-truncate" style="max-width: 250px">{{ $ticket->subject }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-sm text-secondary-light fw-medium">{{ $ticket->user?->name ?? 'Guest' }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column gap-1">
+                                        <span class="badge bg-{{ $statusClass }}-100 text-{{ $statusClass }}-600 w-fit px-2">{{ str_replace('_', ' ', ucfirst($ticket->status)) }}</span>
+                                        <span class="badge bg-{{ $priorityClass }}-100 text-{{ $priorityClass }}-600 w-fit px-2">{{ ucfirst($ticket->priority) }}</span>
+                                    </div>
+                                </td>
+                                <td><span class="text-xs text-secondary-light fw-medium">{{ $ticket->last_replied_at?->format('d M Y, H:i') ?? $ticket->created_at->format('d M Y, H:i') }}</span></td>
                                 <td class="text-end">
-                                    <form method="POST" action="{{ route('admin.ecommerce.support-tickets.update', $ticket) }}" class="d-inline-flex gap-8 align-items-center me-8">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="status" class="form-select form-select-sm" style="width: 130px">
-                                            <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Open</option>
-                                            <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                            <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
-                                            <option value="closed" {{ $ticket->status === 'closed' ? 'selected' : '' }}>Closed</option>
-                                        </select>
-                                        <select name="priority" class="form-select form-select-sm" style="width: 110px">
-                                            <option value="low" {{ $ticket->priority === 'low' ? 'selected' : '' }}>Low</option>
-                                            <option value="medium" {{ $ticket->priority === 'medium' ? 'selected' : '' }}>Medium</option>
-                                            <option value="high" {{ $ticket->priority === 'high' ? 'selected' : '' }}>High</option>
-                                        </select>
-                                        <input type="text" name="admin_note" value="{{ $ticket->admin_note }}" class="form-control form-control-sm" style="width: 200px" placeholder="Admin note">
-                                        <button type="submit" class="btn btn-sm btn-success">Save</button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.ecommerce.support-tickets.destroy', $ticket) }}" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this ticket?')">Delete</button>
-                                    </form>
+                                    <div class="d-flex align-items-center justify-content-end gap-2 py-2">
+                                        <form method="POST" action="{{ route('admin.ecommerce.support-tickets.update', $ticket) }}" class="d-inline-flex gap-2 align-items-center">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="status" class="form-select form-select-sm py-1" style="width: 120px">
+                                                <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Open</option>
+                                                <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                                <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
+                                                <option value="closed" {{ $ticket->status === 'closed' ? 'selected' : '' }}>Closed</option>
+                                            </select>
+                                            <input type="text" name="admin_note" value="{{ $ticket->admin_note }}" class="form-control form-control-sm py-1" style="width: 150px" placeholder="Note...">
+                                            <button type="submit" class="btn btn-sm btn-outline-success-600 radius-8 px-3">Save</button>
+                                        </form>
+                                        <form method="POST" action="{{ route('admin.ecommerce.support-tickets.destroy', $ticket) }}" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger-600 radius-8 d-inline-flex align-items-center gap-1" onclick="return confirm('Delete this ticket?')">
+                                                <iconify-icon icon="mingcute:delete-2-line"></iconify-icon> Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center">No tickets found.</td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
-            <div class="mt-16">{{ $tickets->links() }}</div>
         </div>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if ($.fn.DataTable.isDataTable('#dataTable')) {
+                $('#dataTable').DataTable().destroy();
+            }
+            $('#dataTable').DataTable({
+                responsive: true,
+                order: [[0, 'desc']]
+            });
+        });
+    </script>
 @endsection

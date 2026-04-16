@@ -24,6 +24,7 @@ class BlogPost extends Model
         'published_at',
         'meta_title',
         'meta_description',
+        'meta_keywords',
     ];
 
     protected function casts(): array

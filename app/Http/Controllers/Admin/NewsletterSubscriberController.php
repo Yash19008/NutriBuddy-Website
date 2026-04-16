@@ -14,7 +14,7 @@ class NewsletterSubscriberController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.newsletter.index', [
-            'subscribers' => NewsletterSubscriber::latest()->paginate(20),
+            'subscribers' => NewsletterSubscriber::latest()->get(),
         ]);
     }
 

@@ -11,20 +11,20 @@
     </div>
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">
-            <li class="dropdown">
+            {{-- <li class="dropdown">
                 <a  href="javascript:void(0)">
                     <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
                     <span>Dashboard</span>
                 </a>
                 <ul class="sidebar-submenu">
                     <li>
-                        <a href="{{ route('index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> AI</a>
+                        <a href="{{ route('index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> eCommerce</a>
                     </li>
                     <li>
                     <a href="{{ route('index2') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> CRM</a>
                     </li>
                     <li>
-                    <a href="{{ route('index3') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> eCommerce</a>
+                    <a href="{{ route('index3') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> AI</a>
                     </li>
                     <li>
                     <a href="{{ route('index4') }}"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Cryptocurrency</a>
@@ -48,11 +48,18 @@
                     <a href="{{ route('index10') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> POS & Inventory </a>
                     </li>
                 </ul>
+            </li> --}}
+            <li>
+                <a href="{{ route('index') }}">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                    <span>Dashboard</span>
+                </a>
             </li>
+
             <li class="dropdown">
-                <a  href="javascript:void(0)">
-                    <iconify-icon icon="mdi:cart-outline" class="menu-icon"></iconify-icon>
-                    <span>NutriBuddy Ecommerce</span>
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:box-outline" class="menu-icon"></iconify-icon>
+                    <span>Products Management</span>
                 </a>
                 <ul class="sidebar-submenu">
                     <li>
@@ -67,11 +74,71 @@
                     <li>
                         <a href="{{ route('admin.ecommerce.tax-rates.index') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> Tax Rates</a>
                     </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:cart-large-minimalistic-outline" class="menu-icon"></iconify-icon>
+                    <span>Orders & Sales</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('admin.ecommerce.orders.index') }}"><i class="ri-circle-fill circle-icon text-success-main w-auto"></i> Orders</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.ecommerce.order-returns.index') }}"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Order Returns</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:users-group-two-rounded-outline" class="menu-icon"></iconify-icon>
+                    <span>Customer Relations</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('admin.ecommerce.customers.index') }}"><i class="ri-circle-fill circle-icon text-info-600 w-auto"></i> Customers</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:tag-outline" class="menu-icon"></iconify-icon>
+                    <span>Promotions</span>
+                </a>
+                <ul class="sidebar-submenu">
                     <li>
                         <a href="{{ route('admin.ecommerce.coupons.index') }}"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Coupons</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.ecommerce.orders.index') }}"><i class="ri-circle-fill circle-icon text-success-main w-auto"></i> Orders</a>
+                        <a href="{{ route('admin.ecommerce.newsletter.index') }}"><i class="ri-circle-fill circle-icon text-cyan w-auto"></i> Newsletter</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:star-outline" class="menu-icon"></iconify-icon>
+                    <span>Moderation</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('admin.ecommerce.reviews.index') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Reviews & Ratings</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:tuning-square-2-outline" class="menu-icon"></iconify-icon>
+                    <span>Administration</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('admin.ecommerce.notifications.index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Notifications</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.ecommerce.support-tickets.index') }}"><i class="ri-circle-fill circle-icon text-pink w-auto"></i> Support Tickets</a>
@@ -80,8 +147,17 @@
                         <a href="{{ route('admin.ecommerce.contact-leads.index') }}"><i class="ri-circle-fill circle-icon text-orange w-auto"></i> Contact Leads</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.ecommerce.newsletter.index') }}"><i class="ri-circle-fill circle-icon text-cyan w-auto"></i> Newsletter</a>
+                        <a href="{{ route('admin.ecommerce.settings.general') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> Site Settings</a>
                     </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="solar:document-text-outline" class="menu-icon"></iconify-icon>
+                    <span>Content Management</span>
+                </a>
+                <ul class="sidebar-submenu">
                     <li>
                         <a href="{{ route('admin.ecommerce.blog-categories.index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Blog Categories</a>
                     </li>
@@ -90,7 +166,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="sidebar-menu-group-title">Application</li>
+            {{-- <li class="sidebar-menu-group-title">Application</li>
             <li>
                   <a href="{{ route('email') }}">
                     <iconify-icon icon="mage:email" class="menu-icon"></iconify-icon>
@@ -178,9 +254,9 @@
                     <a  href="{{ route('portfolio') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Portfolios</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
-            <li class="sidebar-menu-group-title">UI Elements</li>
+            {{-- <li class="sidebar-menu-group-title">UI Elements</li>
 
             <li class="dropdown">
                 <a  href="javascript:void(0)">
@@ -367,7 +443,7 @@
             </li>
             <li>
                 <a  href="{{ route('gallery') }}">
-                    <iconify-icon icon="solar:gallery-wide-linear" class="menu-icon"></iconify-icon>
+                    <iconify-icon icon="solar: gallery-wide-linear" class="menu-icon"></iconify-icon>
                     <span>Gallery</span>
                 </a>
             </li>
@@ -435,8 +511,8 @@
                     <i class="ri-checkbox-multiple-blank-line text-xl me-6 d-flex w-auto"></i>
                     <span>Blank Page</span>
                 </a>
-            </li>
-            <li class="dropdown">
+            </li> --}}
+            {{-- <li class="dropdown">
                 <a  href="javascript:void(0)">
                     <iconify-icon icon="icon-park-outline:setting-two" class="menu-icon"></iconify-icon>
                     <span>Settings</span>
@@ -464,6 +540,12 @@
                         <a  href="{{ route('paymentGateway') }}"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Payment Gateway</a>
                     </li>
                 </ul>
+            </li> --}}
+            <li>
+                <a href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <iconify-icon icon="lucide:power" class="menu-icon"></iconify-icon>
+                    <span>Log Out</span>
+                </a>
             </li>
         </ul>
     </div>

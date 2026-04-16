@@ -13,7 +13,7 @@ class TaxRateController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.tax-rates.index', [
-            'taxRates' => TaxRate::orderBy('sort_order')->latest('id')->paginate(15),
+            'taxRates' => TaxRate::orderBy('sort_order')->latest('id')->get(),
         ]);
     }
 
