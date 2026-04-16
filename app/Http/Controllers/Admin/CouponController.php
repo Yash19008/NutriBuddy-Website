@@ -14,7 +14,7 @@ class CouponController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.coupons.index', [
-            'coupons' => Coupon::latest()->paginate(15),
+            'coupons' => Coupon::latest()->get(),
         ]);
     }
 

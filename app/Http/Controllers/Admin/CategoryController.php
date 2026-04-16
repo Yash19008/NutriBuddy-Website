@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.categories.index', [
-            'categories' => Category::with('parent')->latest()->paginate(15),
+            'categories' => Category::with('parent')->latest()->get(),
             'parentCategories' => Category::orderBy('name')->get(['id', 'name']),
         ]);
     }
@@ -26,6 +26,9 @@ class CategoryController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:categories,slug'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'description' => ['nullable', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string'],
+            'meta_keywords' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);
@@ -46,6 +49,9 @@ class CategoryController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:categories,slug,' . $category->id],
             'parent_id' => ['nullable', 'exists:categories,id', 'different:id'],
             'description' => ['nullable', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string'],
+            'meta_keywords' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);

@@ -27,41 +27,41 @@ use App\Http\Controllers\Admin\ProductVariantController as AdminProductVariantCo
 use App\Http\Controllers\Admin\SupportTicketController as AdminSupportTicketController;
 use App\Http\Controllers\Admin\TaxRateController as AdminTaxRateController;
 
-Route::controller(DashboardController::class)->group(function () {
+Route::middleware('auth')->controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('index');
 });
 
 Route::controller(HomeController::class)->group(function () {
-    Route::get('calendar','calendar')->name('calendar');
-    Route::get('chatmessage','chatMessage')->name('chatMessage');
-    Route::get('chatempty','chatempty')->name('chatempty');
-    Route::get('email','email')->name('email');
-    Route::get('error','error1')->name('error');
-    Route::get('faq','faq')->name('faq');
-    Route::get('gallery','gallery')->name('gallery');
-    Route::get('kanban','kanban')->name('kanban');
-    Route::get('pricing','pricing')->name('pricing');
-    Route::get('termscondition','termsCondition')->name('termsCondition');
-    Route::get('widgets','widgets')->name('widgets');
-    Route::get('chatprofile','chatProfile')->name('chatProfile');
-    Route::get('veiwdetails','veiwDetails')->name('veiwDetails');
-    Route::get('blankPage','blankPage')->name('blankPage');
-    Route::get('comingSoon','comingSoon')->name('comingSoon');
-    Route::get('maintenance','maintenance')->name('maintenance');
-    Route::get('starred','starred')->name('starred');
-    Route::get('testimonials','testimonials')->name('testimonials');
-    });
+    Route::get('calendar', 'calendar')->name('calendar');
+    Route::get('chatmessage', 'chatMessage')->name('chatMessage');
+    Route::get('chatempty', 'chatempty')->name('chatempty');
+    Route::get('email', 'email')->name('email');
+    Route::get('error', 'error1')->name('error');
+    Route::get('faq', 'faq')->name('faq');
+    Route::get('gallery', 'gallery')->name('gallery');
+    Route::get('kanban', 'kanban')->name('kanban');
+    Route::get('pricing', 'pricing')->name('pricing');
+    Route::get('termscondition', 'termsCondition')->name('termsCondition');
+    Route::get('widgets', 'widgets')->name('widgets');
+    Route::get('chatprofile', 'chatProfile')->name('chatProfile');
+    Route::get('veiwdetails', 'veiwDetails')->name('veiwDetails');
+    Route::get('blankPage', 'blankPage')->name('blankPage');
+    Route::get('comingSoon', 'comingSoon')->name('comingSoon');
+    Route::get('maintenance', 'maintenance')->name('maintenance');
+    Route::get('starred', 'starred')->name('starred');
+    Route::get('testimonials', 'testimonials')->name('testimonials');
+});
 
-    // aiApplication
+// aiApplication
 Route::prefix('aiapplication')->group(function () {
     Route::controller(AiapplicationController::class)->group(function () {
         Route::get('/codegenerator', 'codeGenerator')->name('codeGenerator');
         Route::get('/codegeneratornew', 'codeGeneratorNew')->name('codeGeneratorNew');
-        Route::get('/imagegenerator','imageGenerator')->name('imageGenerator');
-        Route::get('/textgeneratornew','textGeneratorNew')->name('textGeneratorNew');
-        Route::get('/textgenerator','textGenerator')->name('textGenerator');
-        Route::get('/videogenerator','videoGenerator')->name('videoGenerator');
-        Route::get('/voicegenerator','voiceGenerator')->name('voiceGenerator');
+        Route::get('/imagegenerator', 'imageGenerator')->name('imageGenerator');
+        Route::get('/textgeneratornew', 'textGeneratorNew')->name('textGeneratorNew');
+        Route::get('/textgenerator', 'textGenerator')->name('textGenerator');
+        Route::get('/videogenerator', 'videoGenerator')->name('videoGenerator');
+        Route::get('/voicegenerator', 'voiceGenerator')->name('voiceGenerator');
     });
 });
 
@@ -70,6 +70,8 @@ Route::prefix('authentication')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
         Route::get('/forgotpassword', 'forgotPassword')->name('forgotPassword');
         Route::get('/signin', 'signin')->name('signin');
+        Route::post('/login', 'login')->name('admin.login.post');
+        Route::post('/logout', 'logout')->name('admin.logout');
         Route::get('/signup', 'signup')->name('signup');
     });
 });
@@ -117,13 +119,13 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/index2', 'index2')->name('index2');
         Route::get('/index3', 'index3')->name('index3');
         Route::get('/index4', 'index4')->name('index4');
-        Route::get('/index5','index5')->name('index5');
-        Route::get('/index6','index6')->name('index6');
-        Route::get('/index7','index7')->name('index7');
-        Route::get('/index8','index8')->name('index8');
-        Route::get('/index9','index9')->name('index9');
-        Route::get('/index10','index10')->name('index10');
-        Route::get('/wallet','wallet')->name('wallet');
+        Route::get('/index5', 'index5')->name('index5');
+        Route::get('/index6', 'index6')->name('index6');
+        Route::get('/index7', 'index7')->name('index7');
+        Route::get('/index8', 'index8')->name('index8');
+        Route::get('/index9', 'index9')->name('index9');
+        Route::get('/index10', 'index10')->name('index10');
+        Route::get('/wallet', 'wallet')->name('wallet');
     });
 });
 
@@ -205,9 +207,9 @@ Route::prefix('cryptocurrency')->group(function () {
     });
 });
 
-Route::prefix('admin/ecommerce')->name('admin.ecommerce.')->group(function () {
+Route::prefix('admin/ecommerce')->name('admin.ecommerce.')->middleware('auth')->group(function () {
     Route::resource('categories', AdminCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
-    Route::resource('products', AdminProductController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('products', AdminProductController::class);
     Route::patch('products/{product}/inventory', [AdminProductController::class, 'updateInventory'])->name('products.inventory.update');
     Route::resource('variants', AdminProductVariantController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::patch('variants/{variant}/inventory', [AdminProductVariantController::class, 'updateInventory'])->name('variants.inventory.update');
@@ -218,6 +220,24 @@ Route::prefix('admin/ecommerce')->name('admin.ecommerce.')->group(function () {
     Route::resource('contact-leads', AdminContactLeadController::class)->only(['index', 'update', 'destroy']);
     Route::resource('newsletter', AdminNewsletterSubscriberController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('support-tickets', AdminSupportTicketController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class);
+    Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'update', 'destroy']);
+    Route::resource('order-returns', \App\Http\Controllers\Admin\OrderReturnController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::resource('invoices', \App\Http\Controllers\Admin\InvoiceController::class)->only(['show']);
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('index');
+        Route::post('/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('read');
+        Route::post('/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'markAllAsRead'])->name('read-all');
+        Route::delete('/{id}', [\App\Http\Controllers\Admin\NotificationController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/general', [\App\Http\Controllers\Admin\GeneralSettingController::class, 'index'])->name('general');
+        Route::post('/general', [\App\Http\Controllers\Admin\GeneralSettingController::class, 'update'])->name('general.update');
+    });
+
+    Route::delete('products/images/{image}', [AdminProductController::class, 'deleteImage'])->name('products.images.destroy');
 
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');

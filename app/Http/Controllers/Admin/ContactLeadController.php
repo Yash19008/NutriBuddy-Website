@@ -15,7 +15,7 @@ class ContactLeadController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.contact-leads.index', [
-            'leads' => ContactLead::with('assignee')->latest()->paginate(20),
+            'leads' => ContactLead::with('assignee')->latest()->get(),
             'users' => User::orderBy('name')->get(['id', 'name']),
         ]);
     }

@@ -17,7 +17,7 @@ class BlogPostController extends Controller
     public function index(): View
     {
         return view('admin.ecommerce.blog-posts.index', [
-            'posts' => BlogPost::with(['category', 'author'])->latest()->paginate(15),
+            'posts' => BlogPost::with(['category', 'author'])->latest()->get(),
             'categories' => BlogCategory::where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'users' => User::orderBy('name')->get(['id', 'name']),
         ]);
@@ -37,6 +37,7 @@ class BlogPostController extends Controller
             'published_at' => ['nullable', 'date'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
+            'meta_keywords' => ['nullable', 'string'],
         ]);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['title']);
@@ -63,6 +64,7 @@ class BlogPostController extends Controller
             'published_at' => ['nullable', 'date'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
+            'meta_keywords' => ['nullable', 'string'],
         ]);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['title']);

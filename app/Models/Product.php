@@ -28,12 +28,14 @@ class Product extends Model
         'base_price',
         'compare_at_price',
         'cost_price',
+        'shipping_price',
         'currency',
         'is_active',
         'is_featured',
         'published_at',
         'meta_title',
         'meta_description',
+        'meta_keywords',
     ];
 
     protected function casts(): array
@@ -45,6 +47,7 @@ class Product extends Model
             'base_price' => 'decimal:2',
             'compare_at_price' => 'decimal:2',
             'cost_price' => 'decimal:2',
+            'shipping_price' => 'decimal:2',
             'published_at' => 'datetime',
         ];
     }
@@ -67,5 +70,20 @@ class Product extends Model
     public function inventory(): HasOne
     {
         return $this->hasOne(Inventory::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    public function primaryImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->where('is_primary', true);
     }
 }

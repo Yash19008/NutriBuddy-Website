@@ -11959,6 +11959,13 @@ h6, .h6 {
   border-bottom: 0 !important;
 }
 
+.dataTable thead tr th.dt-orderable-asc,
+.dataTable thead tr th.dt-orderable-desc,
+.dataTable thead tr th.dt-ordering-asc,
+.dataTable thead tr th.dt-ordering-desc {
+  padding-right: 30px !important;
+}
+
 .basic-data-table .dt-layout-row {
   padding-bottom: 0.875rem;
 }

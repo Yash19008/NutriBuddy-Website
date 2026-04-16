@@ -44,6 +44,7 @@ class OrderController extends Controller
         return view('admin.ecommerce.orders.index', [
             'orders' => $orders,
             'statuses' => self::ORDER_STATUSES,
+            'paymentStatuses' => self::PAYMENT_STATUSES,
             'selectedStatus' => $status,
         ]);
     }

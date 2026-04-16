@@ -8,7 +8,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard/index');
+        return view('dashboard/index3');
     }
     
     public function index2()
@@ -18,7 +18,7 @@ class DashboardController extends Controller
     
     public function index3()
     {
-        return view('dashboard/index3');
+        return view('dashboard/index');
     }
     
     public function index4()

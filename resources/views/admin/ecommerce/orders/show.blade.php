@@ -55,7 +55,7 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-6"><strong>Order #:</strong> {{ $order->order_number }}</div>
-                        <div class="col-md-6"><strong>Placed At:</strong> {{ optional($order->placed_at)->format('d M Y H:i') ?? $order->created_at->format('d M Y H:i') }}</div>
+                        <div class="col-md-6"><strong>Placed At:</strong> {{ optional($order->placed_at)->format('d M Y H:i') ?? optional($order->created_at)->format('d M Y H:i') ?? 'N/A' }}</div>
                         <div class="col-md-6"><strong>Customer:</strong> {{ $order->customer_name }} ({{ $order->customer_phone }})</div>
                         <div class="col-md-6"><strong>Email:</strong> {{ $order->customer_email ?: 'N/A' }}</div>
                         <div class="col-md-6"><strong>Payment:</strong> {{ strtoupper($order->payment_method) }} / {{ ucfirst($order->payment_status) }}</div>
